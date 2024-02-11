@@ -1,0 +1,32 @@
+# section 4 video 9
+name: Reusable Workflow
+on:
+    workflow_call:
+    # workflow_call: key word allows other workflows to reuse the current workflow
+        inputs:
+            name:
+                description: "Input description"
+                type: string
+                default: 'Johnny Appleseed'
+                required: true
+        secrets:
+            # secrets: key word allows secrets to be used in the workflow_call event
+            access-token:
+                description: 'Secret description'
+                required: true
+
+jobs:
+    checkout:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: ls -a
+    log-context-and-inputs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Display github context
+              run: echo '${{ toJSON(github) }}'
+            - name: Display name
+              run: echo ${{ inputs.name }}
+            - name: Display access-token secret
+              run: echo ${{ secrets.access-token }}
